@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200913021205_clean2.cs" />
-    <Compile Remove="Migrations\20200913021205_clean2.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\js\bootstrap\bootstrap.js" />
     <Content Remove="wwwroot\js\bootstrap\bootstrap.min.js" />
     <Content Remove="wwwroot\js\jquery.dynamic.js" />
@@ -552,6 +547,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cooperchip.ITDeveloper.Application\Cooperchip.ITDeveloper.Application.csproj" />
+    <ProjectReference Include="..\Cooperchip.ITDeveloper.CrossCutting\Cooperchip.ITDeveloper.CrossCutting.csproj" />
     <ProjectReference Include="..\Cooperchip.ITDeveloper.Data\Cooperchip.ITDeveloper.Data.csproj" />
   </ItemGroup>
 

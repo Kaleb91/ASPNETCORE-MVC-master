@@ -22,5 +22,10 @@ namespace Cooperchip.ITDeveloper.Mvc.Extensions.Identity
         [DataType(DataType.Date)]
         [Display(Name ="Data de Nascimento")]
         public DateTime DataNascimento { get; set; }
+
+        [ProtectedPersonalData]
+        [DataType(DataType.Text)]
+        [StringLength(maximumLength:255, ErrorMessage = "O Campo{0} deve ter entre {2} e {1} caracteres!",MinimumLength = 21)]
+        public string ImgProfilePath { get; set; }
     }
 }

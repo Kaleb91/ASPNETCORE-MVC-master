@@ -8,13 +8,28 @@ namespace Cooperchip.ITDeveloper.Mvc.Extensions.ViewComponents.Helpers
     {
         public static int TotReg(ITDeveloperDbContext ctx)
         {
-            return (from pac in ctx.Paciente.AsNoTracking() select pac).Count();
+            int paciente = ctx.Paciente.AsNoTracking().Count();
+
+            if (paciente == 0)
+            {
+                paciente = 1;
+            }
+
+            return paciente;
+
         }
 
         public static decimal GetNumRegEstado(ITDeveloperDbContext ctx, string estado)
         {
-            return ctx.Paciente.AsNoTracking()
-                .Count(x => x.EstadoPaciente.Descricao.Contains(estado));
+            var pac = ctx.Paciente.AsNoTracking().Count(x => x.EstadoPaciente.Descricao.Contains(estado));
+
+            if (pac == 0)
+            {
+                pac = 1;
+            }
+
+            return pac;
+
         }
 
     }

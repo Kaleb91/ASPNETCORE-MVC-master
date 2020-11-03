@@ -1,24 +1,66 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject Cooperchip.ITDeveloper.Domain.Interfaces.IUserInContext _UserContext
 
-@if (SignInManager.IsSignedIn(User))
+
+@if (_UserContext.IsAuthenticated() && !string.IsNullOrEmpty(_UserContext.GetUserImgProfilePatch()))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-            </li>
-        </ul>
-    </form>
+<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <img src="/uploads/@_UserContext.GetUserImgProfilePatch()" alt="avatar" style="clear:both; float: left; margin-right:10px; border:2px solid #eeeeee; width:50px; height:50px; border-radius:50%;">
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá @_UserContext.GetUserApelido()!</a>
+        </li>
+        <li>
+            <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+        </li>
+    </ul>
+</form> 
 }
+else if (_UserContext.IsAuthenticated() && string.IsNullOrEmpty(_UserContext.GetUserImgProfilePatch()))
+{
+<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <img src="/img/avatars/Foto_padrao.jpg" alt="avatar" style="clear:both; float: left; margin-right:10px; border:2px solid #eeeeee; width:50px; height:50px; border-radius:50%;">
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá @_UserContext.GetUserApelido()!</a>
+        </li>
+        <li>
+            <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+        </li>
+    </ul>
+</form> }
 else
 {
+<ul class="nav navbar-nav navbar-right">
+    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+</ul>}
+
+
+@*@if (SignInManager.IsSignedIn(User))
+{
+<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+        <li>
+            <img src="/img/avatars/Foto_padrao.jpg" alt="avatar" style="clear:both; float: left; margin-right:10px; border:2px solid #eeeeee; width:50px; height:50px; border-radius:50%;">
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá @UserManager.GetUserName(User)!</a>
+        </li>
+        <li>
+            <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+        </li>
     </ul>
-}
+</form> }
+else
+{
+<ul class="nav navbar-nav navbar-right">
+    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+</ul>}*@

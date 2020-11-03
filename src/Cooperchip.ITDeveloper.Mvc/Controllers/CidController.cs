@@ -209,7 +209,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
                         return BadRequest();
                     }
                 }
-                RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
             return View();
 
@@ -228,7 +228,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var cid = _context.Cid.FindAsync(id);
+            var cid = await _context.Cid.FindAsync(id);
             _context.Remove(cid);
             await _context.SaveChangesAsync();
 
