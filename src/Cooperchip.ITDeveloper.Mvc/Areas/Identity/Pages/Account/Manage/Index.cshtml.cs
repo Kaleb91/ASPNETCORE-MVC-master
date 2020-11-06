@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Cooperchip.ITDeveloper.Mvc.Extensions.Identity;
+using Cooperchip.ITDeveloper.Mvc.Infra;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
+        private readonly IUnitOfUpload _unitOfUpload;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -21,11 +24,13 @@ namespace Cooperchip.ITDeveloper.Mvc.Areas.Identity.Pages.Account.Manage
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfUpload unitOfUpload)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _unitOfUpload = unitOfUpload;
         }
 
         public string Username { get; set; }
@@ -71,7 +76,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Areas.Identity.Pages.Account.Manage
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Celular")]
             public string PhoneNumber { get; set; }
 
 
@@ -107,7 +112,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(IFormFile file)
         {
             if (!ModelState.IsValid)
             {
@@ -156,14 +161,16 @@ namespace Cooperchip.ITDeveloper.Mvc.Areas.Identity.Pages.Account.Manage
             {
                 user.DataNascimento = Input.DataNascimento;
             }
-            if (Input.ImgProfilePath != user.ImgProfilePath)
+
+
+            if (file != null)
             {
-                user.ImgProfilePath = Input.ImgProfilePath;
+                _unitOfUpload.UploadImage(file);
+                user.ImgProfilePath = file.FileName;
             }
-
-
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Perfil Atualizado com sucesso!";
             return RedirectToPage();
         }
 

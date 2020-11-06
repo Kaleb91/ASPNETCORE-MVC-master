@@ -1,20 +1,12 @@
 ﻿
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject Cooperchip.ITDeveloper.Domain.Interfaces.IUserInContext _UserInContext;
 
-<!--[if lt IE 9]>
-  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
-<!-- .page-navbar -->
 <div id="header" class="page-navbar">
     <!-- .navbar-brand -->
     <a href="~/index.html" class="navbar-brand hidden-xs hidden-sm">
         <img src="~/img/logo.png" class="logo hidden-xs" alt="Dynamic logo">
         <img src="~/img/logosm.png" class="logo-sm hidden-lg hidden-md" alt="Dynamic logo">
     </a>
-    <!-- / navbar-brand -->
-    <!-- .no-collapse -->
     <div id="navbar-no-collapse" class="navbar-no-collapse">
         <!-- top left nav -->
         <ul class="nav navbar-nav">
@@ -28,8 +20,7 @@
                 <a href="#" class="reset-layout tipB" title="Reset panel position for this page"><i class="fa fa-history"></i></a>
             </li>
         </ul>
-        <!-- / top left nav -->
-        <!-- top right nav -->
+
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" data-toggle="dropdown">
@@ -107,40 +98,36 @@
                     <i class="fa fa-user"></i>
                     <span class="sr-only">Gerenciamento de Usuário</span>
                 </a>
-                @if (SignInManager.IsSignedIn(User))
+                @if (_UserInContext.IsAuthenticated())
                 {
-                    <ul class="dropdown-menu right dropdown-notification" role="menu">
-                        <li>
-                            <a href="#" class="dropdown-menu-header">Gerenciamento de Usuário</a>
-                        </li>
-                        <li>
-                            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Usuário"><i class="l-basic-life-buoy"></i> @UserManager.GetUserName(User)</a>
-                        </li>
-                        <form style="margin: 6px;" asp-area="Identity" asp-page="/Account/Logout" 
-                              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
-                            <li>
-                                <button type="submit" class="btn btn-link text-left" style="align-content: flex-start; text-decoration: none; text-decoration-color: darkgray;"><i class="l-basic-signs"></i> Sair</button>
-                            </li>
-                        </form>
-                        <li>
-                            <a href="#" class="view-all">Visualizar todos <i class="l-arrows-right"></i> </a>
-                        </li>
-                    </ul>
-                }
+    <ul class="dropdown-menu right dropdown-notification" role="menu">
+        <li>
+            <a href="#" class="dropdown-menu-header">Gerenciamento de Usuário</a>
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Usuário"><i class="fa fa-edit"></i> @_UserInContext.GetUserApelido()</a>
+        </li>
+
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Logout" title="Logout"><i class="fa fa-power-off"></i> Sair</a>
+        </li>
+        <li>
+            <a href="#" class="view-all">Visualizar todos <i class="l-arrows-right"></i> </a>
+        </li>
+    </ul> }
                 else
                 {
-                    <ul class="dropdown-menu right dropdown-notification" role="menu">
-                        <li>
-                            <a href="#" class="dropdown-menu-header">Gerenciamento de Usuário</a>
-                        </li>
-                        <li>
-                            <a asp-area="Identity" asp-page="/Account/Register"><i class="l-basic-life-buoy"></i> Registre-se</a>
-                        </li>
-                        <li>
-                            <a asp-area="Identity" asp-page="/Account/Login"><i class="l-basic-server2"></i> Fazer Login</a>
-                        </li>
-                    </ul>
-                }
+    <ul class="dropdown-menu right dropdown-notification" role="menu">
+        <li>
+            <a href="#" class="dropdown-menu-header">Gerenciamento de Usuário</a>
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Register"><i class="l-basic-life-buoy"></i> Registre-se</a>
+        </li>
+        <li>
+            <a asp-area="Identity" asp-page="/Account/Login"><i class="l-basic-server2"></i> Fazer Login</a>
+        </li>
+    </ul>}
 
             </li>
 
