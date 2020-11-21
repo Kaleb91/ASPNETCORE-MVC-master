@@ -13,13 +13,13 @@
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <label>Imagem de perfil:</label><br />
-            <div style="clear:both; float: left; margin-top:15px ; margin-bottom:15px ;padding-left:10px;padding-top:10px; border:2px solid #00ffff; background-color:#76795d; width:330px; height:330px; border-radius:3%;">
+            <div class="cooperchipCicleProfileIndex">
                 @if (!string.IsNullOrEmpty(Model.Input.ImgProfilePath))
                 {
-        <img src="~/uploads/@Model.Input.ImgProfilePath" alt="Imagem de perfil" height="90" style="clear:both; float: left; margin-right:10px; border:2px solid #eeeeee; width:310px; height:310px; border-radius:50%;" /> <br /> }
+        <img src="~/uploads/@Model.Input.ImgProfilePath" alt="Imagem de perfil" height="90" class="cooperchipCicleProfileIndex" /> <br /> }
                     else
                     {
-        <img src="~/img/avatars/Foto_padrao.jpg" alt="Imagem de perfil" style="clear:both; float: left; margin-right:10px; border:2px solid #eeeeee; width:310px; height:310px; border-radius:50%;" />}
+        <img src="~/img/avatars/Foto_padrao.jpg" alt="Imagem de perfil" class="cooperchipCicleProfileIndex" />}
             </div>
             <br />
 
