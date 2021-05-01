@@ -1,5 +1,8 @@
-﻿using Cooperchip.ITDeveloper.CrossCutting.Helpers;
+﻿using Cooperchip.ITDeveloper.Application.Servicos;
+using Cooperchip.ITDeveloper.CrossCutting.Auxiliar;
+using Cooperchip.ITDeveloper.CrossCutting.Helpers;
 using Cooperchip.ITDeveloper.Domain.Interfaces;
+using Cooperchip.ITDeveloper.Domain.Interfaces.Entidades;
 using Cooperchip.ITDeveloper.Mvc.Extensions.Filters;
 using Cooperchip.ITDeveloper.Mvc.Extensions.Identity;
 using Cooperchip.ITDeveloper.Mvc.Extensions.Identity.Services;
@@ -10,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace Cooperchip.ITDeveloper.Mvc.Configuration
 {
@@ -18,6 +20,8 @@ namespace Cooperchip.ITDeveloper.Mvc.Configuration
     {
         public static IServiceCollection AddDependencyInjectConfig(this IServiceCollection services,IConfiguration configuration)
         {
+            services.AddScoped<IRepositoryDomainPaciente, PacienteService>();
+
             services.AddTransient<IUnitOfUpload, UnitOfUpload>();
             
 
@@ -25,6 +29,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //===================================================================//
             services.AddScoped<IUserInContext, AspNetUsers>();
+            services.AddScoped<IUserInAllLayer, UserInAllLayer>();
             //===================================================================//
 
             //=====Adicionar Claims para HttpContext Toda Aplications===========//

@@ -1,10 +1,13 @@
 ﻿
+using Cooperchip.ITDeveloper.Domain.Interfaces;
 using Cooperchip.ITDeveloper.Mvc.Models;
 using Cooperchip.ITDeveloper.Mvc.ViewModels;
 using KissLog;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -17,21 +20,25 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
     {
         private readonly IEmailSender _emailSender;
         private readonly ILogger _looger;
+        private readonly IUserInContext _user;
+        private readonly IUserInAllLayer _userInAllLayer;
 
-        public HomeController(IEmailSender emailSender, ILogger looger)
+        public HomeController(IEmailSender emailSender, ILogger looger, IUserInAllLayer userInAllLayer, IUserInContext user)
         {
             _emailSender = emailSender;
             _looger = looger;
+            _userInAllLayer = userInAllLayer;
+            _user = user;
         }
 
         [Route("")]
         [Route("pagina-inicial")]
         public IActionResult Index()
-        {
+        {          
             return View();
         }
 
-
+        //[Authorize(Roles = "Admin")]
         [Route("dashboard")]
         [Route("pagina-de-estatistica")]
         public IActionResult Dashboard()

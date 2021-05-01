@@ -12,33 +12,35 @@ namespace Cooperchip.ITDeveloper.CrossCutting.Helpers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AspNetUsers(IHttpContextAccessor httpContextAccessor)
+        ClaimsPrincipal _user;
+        public AspNetUsers(IHttpContextAccessor httpContextAccessor, ClaimsPrincipal user)
         {
             _httpContextAccessor = httpContextAccessor;
+            _user = user;
         }
 
-        public string Name => _httpContextAccessor.HttpContext.User.Identity.Name;
+        public string Name => _user.Identity.Name;
 
         public Guid GetUserId()
         {
-            return IsAuthenticated() ? Guid.Parse(_httpContextAccessor.HttpContext.User.GetUserId()) : Guid.Empty;
+            return IsAuthenticated() ? Guid.Parse(_user.GetUserId()) : Guid.Empty;
         }
 
        
 
         public string GetUserApelido()
         {
-            return IsAuthenticated() ? _httpContextAccessor.HttpContext.User.GetUserApelido() : "";
+            return IsAuthenticated() ? _user.GetUserApelido() : "";
         }
 
         public string GetUserDataNascimento()
         {
-            return IsAuthenticated() ? _httpContextAccessor.HttpContext.User.GetUserDataNascimento() : "";
+            return IsAuthenticated() ? _user.GetUserDataNascimento() : "";
         }
 
         public string GetUserEmail()
         {
-            return IsAuthenticated() ? _httpContextAccessor.HttpContext.User.GetUserEmail() : "";
+            return IsAuthenticated() ? _user.GetUserEmail() : "";
             
         }
 
@@ -46,25 +48,25 @@ namespace Cooperchip.ITDeveloper.CrossCutting.Helpers
 
         public string GetUserImgProfilePatch()
         {
-            return IsAuthenticated() ? _httpContextAccessor.HttpContext.User.GetUserImgProfilePath() : "";
+            return IsAuthenticated() ? _user.GetUserImgProfilePath() : "";
         }
 
         public string GetUserNomeCompleto()
         {
-            return IsAuthenticated() ? _httpContextAccessor.HttpContext.User.GetUserNomeCompleto() : "";
+            return IsAuthenticated() ? _user.GetUserNomeCompleto() : "";
         }
 
         public bool IsAuthenticated()
         {
-            return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+            return _user.Identity.IsAuthenticated;
         }
         public IEnumerable<Claim> GetClaimsIdentity()
         {
-            return _httpContextAccessor.HttpContext.User.Claims;
+            return _user.Claims;
         }
         public bool IsInRole(string role)
         {
-            return _httpContextAccessor.HttpContext.User.IsInRole(role);
+            return _user.IsInRole(role);
         }
     }
 }

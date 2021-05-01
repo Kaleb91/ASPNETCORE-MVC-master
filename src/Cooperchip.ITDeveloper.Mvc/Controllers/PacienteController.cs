@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Cooperchip.ITDeveloper.Domain.Interfaces.Entidades;
 
 namespace Cooperchip.ITDeveloper.Mvc.Controllers
 {
@@ -15,17 +15,18 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
     public class PacienteController : Controller
     {
         private readonly ITDeveloperDbContext _context;
+        private readonly IRepositoryDomainPaciente _repoPaciente;
 
-        public PacienteController(ITDeveloperDbContext context)
+        public PacienteController(ITDeveloperDbContext context, IRepositoryDomainPaciente repoPaciente)
         {
             _context = context;
+            _repoPaciente = repoPaciente;
         }
 
         // GET: Paciente
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Paciente
-                .Include(x => x.EstadoPaciente).AsNoTracking().ToListAsync());
+            return View(await _repoPaciente.ListaPacientesComEstado());
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -35,8 +36,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
                 return NotFound();
             }
 
-            var paciente = await _context.Paciente.Include(x=>x.EstadoPaciente).AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var paciente = await _repoPaciente.ObterPacienteComEstadoPaciente(id);
             if (paciente == null)
             {
                 return NotFound();
@@ -45,9 +45,9 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
             return View(paciente);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.EstadoPaciente = new SelectList(_context.EstadoPaciente, "Id", "Descricao");
+            ViewBag.EstadoPaciente = new SelectList(await _repoPaciente.ListaEstadoPaciente(), "Id", "Descricao");
             return View();
         }
 
@@ -59,12 +59,11 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 //paciente.Id = Guid.NewGuid(); // Não Usar
-                _context.Add(paciente);
-                await _context.SaveChangesAsync();
+                await _repoPaciente.Inserir(paciente);
                 //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Index");
             }
-            ViewBag.EstadoPaciente = new SelectList(_context.EstadoPaciente, "Id", "Descricao", paciente.EstadoPacienteId);
+            ViewBag.EstadoPaciente = new SelectList(await _repoPaciente.ListaEstadoPaciente(), "Id", "Descricao", paciente.EstadoPacienteId);
             return View(paciente);
         }
 
@@ -80,7 +79,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
             {
                 return NotFound();
             }
-            ViewBag.EstadoPaciente = new SelectList(_context.EstadoPaciente, "Id", "Descricao", paciente.EstadoPacienteId);
+            ViewBag.EstadoPaciente = new SelectList(await _repoPaciente.ListaEstadoPaciente(), "Id", "Descricao", paciente.EstadoPacienteId);
             return View(paciente);
         }
 
@@ -113,7 +112,7 @@ namespace Cooperchip.ITDeveloper.Mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.EstadoPaciente = new SelectList(_context.EstadoPaciente, "Id", "Descricao", paciente.EstadoPacienteId);
+            ViewBag.EstadoPaciente = new SelectList(await _repoPaciente.ListaEstadoPaciente(), "Id", "Descricao", paciente.EstadoPacienteId);
             return View(paciente);
         }
 
